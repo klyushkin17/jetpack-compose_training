@@ -16,11 +16,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,23 +43,38 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            var name = remember {
+                mutableStateOf("")
+            }
+            var names = remember {
+                mutableStateOf(listOf<String>())
+            }
             Jetpackcompose_trainingTheme {
-                var count = remember {
-                    mutableIntStateOf(0)
-                }
                 Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
                 ) {
-                    Text(
-                        text = count.value.toString(),
-                        fontSize = 30.sp
-                    )
-                    Button(onClick = {
-                        count.value++
-                    }) {
-                        Text(text = "Click me!")
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        OutlinedTextField(
+                            value = name.value,
+                            onValueChange = { text ->
+                                name.value = text
+                        })
+
+                        Button(onClick = {
+                            names.value += name.value
+                        }) {
+                            Text(text = "Add")
+                        }
+                    }
+
+                    LazyColumn {
+                        items(names.value){currentName ->
+                            Text(text = currentName)
+                        }
                     }
                 }
             }
