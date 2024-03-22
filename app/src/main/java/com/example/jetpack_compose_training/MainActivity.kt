@@ -9,11 +9,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -59,25 +61,42 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         OutlinedTextField(
+                            modifier = Modifier.weight(1f),
                             value = name.value,
                             onValueChange = { text ->
                                 name.value = text
                         })
+                        
+                        Spacer(modifier = Modifier.width(16.dp))
 
-                        Button(onClick = {
-                            names.value += name.value
+                        Button(
+                            onClick = {
+                                names.value += name.value
+                                name.value = ""
                         }) {
                             Text(text = "Add")
                         }
                     }
 
-                    LazyColumn {
-                        items(names.value){currentName ->
-                            Text(text = currentName)
-                        }
-                    }
+                    ListOfNames(names = names.value)
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun ListOfNames(
+    names: List<String>, modifier: Modifier = Modifier
+) {
+    LazyColumn {
+        items(names){currentName ->
+            Text(
+                text = currentName,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            )
         }
     }
 }
